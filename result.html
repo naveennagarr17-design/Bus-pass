@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>e-BusPass</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    background: #d9ecee; color: #2b2b2b;
+    font-family: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { width: 100%; max-width: 560px; padding: 24px; text-align: center; }
+  h1 { margin: 0 0 20px; font: 700 28px "Times New Roman", Georgia, serif; color: #0f9ea3; }
+  img { width: 100%; height: auto; border-radius: 8px; background: #fff; }
+  .missing { display: none; padding: 40px 16px; background: #fff; border-radius: 8px; }
+</style>
+</head>
+<body>
+  <main>
+    <h1>Your e-BusPass</h1>
+    <!-- Put your picture in this folder as photo.jpg, or change the src below -->
+    <img id="photo" src="photo.jpg" alt="Pass photo"
+         onerror="this.style.display='none'; document.getElementById('missing').style.display='block';">
+    <div class="missing" id="missing">
+      <p>Apni photo isi folder mein <b>photo.jpg</b> naam se rakho, phir page refresh karo.</p>
+    </div>
+  </main>
+</body>
+</html>

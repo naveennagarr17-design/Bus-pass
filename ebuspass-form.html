@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Your e-BusPass</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #d9ecee;
+    --teal: #0f9ea3;
+    --footer: #00a3a3;
+    --pink: #f4636f;
+    --line: #a9d6d9;
+    --ink: #2b2b2b;
+    --error: #d32f2f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  /* Top bar */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    height: 56px;
+    padding: 0 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.18);
+  }
+  header h1 {
+    margin: 0;
+    font: 700 20px "Times New Roman", Georgia, serif;
+    color: var(--teal);
+  }
+  .icon-btn { background: none; border: 0; padding: 8px; cursor: pointer; }
+  .burger, .dots { display: flex; flex-direction: column; gap: 4px; }
+  .burger span { width: 25px; height: 4px; border-radius: 2px; background: var(--pink); }
+  .dots { gap: 3px; }
+  .dots span { width: 5px; height: 5px; border-radius: 50%; background: #222; }
+
+  /* Form area */
+  main { width: 100%; max-width: 430px; margin: 0 auto; padding: 4px 45px 32px; }
+  h2 {
+    margin: 8px 0 20px;
+    text-align: center;
+    font: 700 24px "Times New Roman", Georgia, serif;
+    color: var(--teal);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 0; }
+  form { padding: 28px 0; }
+  label { display: block; margin: 0 0 10px; font-weight: 700; font-size: 14px; }
+  .req { color: #e53935; margin-left: 4px; }
+  .field { margin-bottom: 16px; }
+  input[type="text"], input[type="tel"] {
+    width: 100%; height: 40px;
+    padding: 0 11px;
+    font: 400 14px Roboto, system-ui, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid #c9cfd1;
+    border-radius: 8px;
+  }
+  input:focus-visible, button:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+  input[readonly] { background: #e6e2e2; }
+  .err { min-height: 14px; margin: 4px 0 0; font-size: 12px; color: var(--error); }
+
+  /* Captcha */
+  .captcha-head { display: flex; align-items: center; justify-content: space-between; }
+  .captcha-head h3 { margin: 0; font-size: 20px; font-weight: 500; }
+  .refresh { background: none; border: 0; padding: 4px; cursor: pointer; line-height: 0; }
+  .refresh svg { width: 36px; height: 36px; fill: #2fb344; }
+  canvas { display: block; width: 204px; max-width: 100%; height: auto; margin: 2px 0 24px 16px; background: #fff; }
+
+  /* Submit */
+  .submit {
+    display: block; width: 85%; height: 35px; margin: 20px auto 0;
+    border: 0; border-radius: 6px;
+    background: var(--pink); color: #fff;
+    font: 700 16px Roboto, system-ui, sans-serif;
+    cursor: pointer;
+  }
+  .submit:active { transform: translateY(1px); }
+  .status { margin-top: 20px; text-align: center; font-weight: 500; }
+  .status.ok { color: #1b7a33; }
+
+  footer { margin-top: auto; min-height: 50px; background: var(--footer); }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="icon-btn" aria-label="Open menu"><span class="burger"><span></span><span></span><span></span></span></button>
+  <h1>Home</h1>
+  <button class="icon-btn" aria-label="More options"><span class="dots"><span></span><span></span><span></span></span></button>
+</header>
+
+<main>
+  <h2>Get Your e-BusPass</h2>
+  <hr>
+
+  <form id="passForm" novalidate>
+    <div class="field">
+      <label for="passNo">e-BusPass Number<span class="req">*</span></label>
+      <input id="passNo" type="text" readonly>
+    </div>
+
+    <div class="field">
+      <label for="mobile">Enter Mobile Number<span class="req">*</span></label>
+      <input id="mobile" type="tel" inputmode="numeric" maxlength="10" placeholder="Enter Mobile Number" autocomplete="tel-national">
+      <p class="err" id="mobileErr" role="alert"></p>
+    </div>
+
+    <div class="captcha-head">
+      <h3>Captcha</h3>
+      <button type="button" class="refresh" id="refresh" aria-label="Refresh captcha">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+      </button>
+    </div>
+    <canvas id="captcha" width="560" height="140" aria-label="Captcha image"></canvas>
+
+    <div class="field">
+      <label for="captchaInput">Type the captcha Here</label>
+      <input id="captchaInput" type="text" placeholder="Type Captcha" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <p class="err" id="captchaErr" role="alert"></p>
+    </div>
+
+    <button type="submit" class="submit">SUBMIT</button>
+    <p class="status" id="status" role="status"></p>
+  </form>
+
+  <hr>
+</main>
+
+<footer></footer>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  let code = "";
+
+  // ===== EDIT THESE =====
+  const PASS_NUMBER = "7502092575168";
+  const RESULT_PAGE = "result.html";
+  // ======================
+
+  $("passNo").value = PASS_NUMBER;
+
+  function newCaptcha() {
+    const buf = crypto.getRandomValues(new Uint32Array(6));
+    code = Array.from(buf, n => chars[n % chars.length]).join("");
+    const c = $("captcha"), g = c.getContext("2d");
+    g.fillStyle = "#fff";
+    g.fillRect(0, 0, c.width, c.height);
+    g.font = "bold 90px Arial, Helvetica, sans-serif";
+    g.fillStyle = "#000";
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    g.fillText(code, c.width / 2, c.height / 2 + 4);
+    $("captchaInput").value = "";
+  }
+
+  $("refresh").addEventListener("click", newCaptcha);
+
+  $("mobile").addEventListener("input", e => {
+    e.target.value = e.target.value.replace(/\D/g, "");
+  });
+
+  $("passForm").addEventListener("submit", e => {
+    e.preventDefault();
+
+    const mobile = $("mobile").value.trim();
+    const typed = $("captchaInput").value.trim();
+    const mobileOk = mobile.length > 0;
+    const captchaOk = typed === code;
+
+    $("mobileErr").textContent = mobileOk ? "" : "Enter a mobile number.";
+    $("captchaErr").textContent = captchaOk ? "" : "Captcha doesn't match. Try again.";
+    $("status").textContent = "";
+    $("status").className = "status";
+
+    if (!captchaOk) newCaptcha();
+    if (!mobileOk || !captchaOk) return;
+
+    const page = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>e-BusPass</title><style>body{margin:0;background:#d9ecee;font-family:Roboto,system-ui,sans-serif;color:#2b2b2b;text-align:center}main{max-width:560px;margin:0 auto;padding:24px}h1{margin:0 0 20px;font:700 28px "Times New Roman",Georgia,serif;color:#0f9ea3}p{padding:40px 16px;background:#fff;border-radius:8px}</style></head><body><main><h1>Your e-BusPass</h1><p>Photo is not available in the hosted version. Download the files and add photo.jpg next to them.</p></main></body></html>';
+
+    // On your laptop, open result.html with your photo.
+    const local = location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(location.hostname);
+
+    window.open(
+      local ? RESULT_PAGE : URL.createObjectURL(new Blob([page], { type: "text/html" })),
+      "_blank"
+    );
+
+    newCaptcha();
+  });
+
+  newCaptcha();
+</script>
+</body>
+</html>

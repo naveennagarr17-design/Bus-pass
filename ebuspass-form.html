@@ -197,11 +197,7 @@
     // On your laptop, open result.html with your photo.
     const local = location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(location.hostname);
 
-    window.open(
-      local ? RESULT_PAGE : URL.createObjectURL(new Blob([page], { type: "text/html" })),
-      "_blank"
-    );
-
+    window.open(RESULT_PAGE, "_blank");
     newCaptcha();
   });
 
